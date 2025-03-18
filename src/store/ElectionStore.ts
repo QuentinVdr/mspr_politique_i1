@@ -1,11 +1,12 @@
 import { TElection } from '@/types/ElectionType';
 import { fetchAndParseCSV } from '@/utils/fetchData';
+import { getUniqueValues } from '@/utils/uniqueArray';
 import { create } from 'zustand';
 
 type TElectionStore = {
   elections: TElection[];
   fetchElections: () => Promise<void>;
-  annees: () => number[];
+  getAnnees: () => number[];
 };
 
 export const useElectionStore = create<TElectionStore>((set, get) => ({
@@ -19,5 +20,5 @@ export const useElectionStore = create<TElectionStore>((set, get) => ({
         console.error(err);
       });
   },
-  annees: () => get().elections.map((election) => election.annee)
+  getAnnees: () => getUniqueValues(get().elections.map((election) => election.annee))
 }));
