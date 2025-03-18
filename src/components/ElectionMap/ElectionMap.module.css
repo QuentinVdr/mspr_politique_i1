@@ -1,0 +1,5 @@
+.mapContainer {
+  width: calc(100vw - 64px);
+  height: 80vh;
+  margin: 0 auto;
+}
