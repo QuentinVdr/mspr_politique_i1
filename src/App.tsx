@@ -1,6 +1,6 @@
+import Papa from 'papaparse';
 import { useEffect, useState } from 'react';
 import { TElection } from './types/ElectionType';
-import { fetchCsvData } from './utils/fetchData';
 
 function App() {
   const [data, setData] = useState<TElection[]>([]);
@@ -8,9 +8,19 @@ function App() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchCsvData()
-      .then((result) => {
-        setData(result);
+    fetch('data/data_csp_election.csv')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.text();
+      })
+      .then((csvString) => {
+        const result = Papa.parse<TElection>(csvString, {
+          header: true,
+          skipEmptyLines: true
+        });
+        setData(result.data);
         setLoading(false);
       })
       .catch((err) => {
