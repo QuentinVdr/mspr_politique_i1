@@ -1,41 +1,27 @@
-import { useEffect, useState } from 'react';
-import { TElection } from './types/ElectionType';
-import { fetchAndParseCSV } from './utils/fetchData';
+import { useEffect } from 'react';
+import { useElectionStore } from './store/ElectionStore';
 
 function App() {
-  const [data, setData] = useState<TElection[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { fetchElections, elections } = useElectionStore();
 
   useEffect(() => {
-    fetchAndParseCSV()
-      .then((data) => {
-        setData(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) return <p>Loading data...</p>;
-  if (error) return <p>Error loading data: {error}</p>;
+    fetchElections();
+  }, [fetchElections]);
 
   return (
     <div>
       <h2>CSV Data</h2>
-      {data.length > 0 ? (
+      {elections.length > 0 ? (
         <table>
           <thead>
             <tr>
-              {Object.keys(data[0]).map((header) => (
+              {Object.keys(elections[0]).map((header) => (
                 <th key={header}>{header}</th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {data.map((row) => (
+            {elections.map((row) => (
               <tr key={`${row.code_canton}-${row.annee}`}>
                 {Object.entries(row).map(([key, value]) => (
                   <td key={key}>{value}</td>
