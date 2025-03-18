@@ -45,10 +45,10 @@ function App() {
             </tr>
           </thead>
           <tbody>
-            {data.map((row, index) => (
-              <tr key={index}>
-                {Object.values(row).map((value, i) => (
-                  <td key={i}>{value}</td>
+            {data.map((row) => (
+              <tr key={`${row.code_canton}-${row.annee}`}>
+                {Object.entries(row).map(([key, value]) => (
+                  <td key={key}>{value}</td>
                 ))}
               </tr>
             ))}
