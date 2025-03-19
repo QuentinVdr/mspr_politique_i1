@@ -7,6 +7,7 @@ type TElectionStore = {
   elections: TElection[];
   fetchElections: () => Promise<void>;
   getAnnees: () => number[];
+  getElectionByAnnee: (annee: number) => TElection[];
 };
 
 export const useElectionStore = create<TElectionStore>((set, get) => ({
@@ -20,5 +21,6 @@ export const useElectionStore = create<TElectionStore>((set, get) => ({
         console.error(err);
       });
   },
-  getAnnees: () => getUniqueValues(get().elections.map((election) => election.annee))
+  getAnnees: () => getUniqueValues(get().elections.map((election) => election.annee)),
+  getElectionByAnnee: (annee: number) => get().elections.filter((election) => election.annee === annee)
 }));

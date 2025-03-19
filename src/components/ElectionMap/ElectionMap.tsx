@@ -1,14 +1,19 @@
+import { useElectionStore } from '@/store/ElectionStore';
+import { TElection } from '@/types/ElectionType';
+import { getColorsByPolitical } from '@/utils/politicalColors';
 import { useEffect, useState } from 'react';
 import { GeoJSON, MapContainer, TileLayer } from 'react-leaflet';
 import styles from './ElectionMap.module.css';
 
 export default function ElectionMap() {
   const center: [number, number] = [43.9351691, 6.0679194];
-  const [selectedCanton, setSelectedCanton] = useState<string | null>(null);
+  const getElectionByAnnee = useElectionStore((state) => state.getElectionByAnnee);
+  const [elections, setElections] = useState<TElection[]>([]);
   const [geoJsonData, setGeoJsonData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    setElections(getElectionByAnnee(2022));
     // Fetch GeoJSON data
     fetch('data/cantons_par_commune_PACA.geojson')
       .then((response) => response.json())
@@ -22,17 +27,21 @@ export default function ElectionMap() {
       });
   }, []);
 
+  const getElectionResult = (canton: string) => {
+    return elections.find((election: TElection) => election.code_canton === canton);
+  };
+
   // Style function for the GeoJSON features
   const cantonStyle = (feature: any) => {
-    const isSelected = selectedCanton === feature.properties.Canton;
+    const cantonElection = getElectionResult(feature.properties.Canton);
 
     return {
-      fillColor: isSelected ? '#3388ff' : '#2a81cb',
-      weight: isSelected ? 3 : 1,
+      fillColor: getColorsByPolitical(cantonElection?.parti_gagnant ?? 'defaultColor'),
+      weight: 1,
       opacity: 1,
       color: 'white',
       dashArray: '3',
-      fillOpacity: isSelected ? 0.7 : 0.5
+      fillOpacity: 0.5
     };
   };
 
@@ -63,9 +72,6 @@ export default function ElectionMap() {
       mouseout: (e: any) => {
         const layer = e.target;
         layer.setStyle(cantonStyle(feature));
-      },
-      click: (e: any) => {
-        setSelectedCanton(cantonId);
       }
     });
   };
