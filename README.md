@@ -2,10 +2,10 @@
 
 ## TODO
 
-- [ ] Ajouter une carte avec les gagnants de chaque canton
-  - [ ] Ajouter une légende
-  - [ ] Ajouter un bouton pour changer d'année
-- [ ] Ajouter un graphique avec la progression des résultats des partis par année
+- [x] Ajouter une carte avec les gagnants de chaque canton
+  - [x] Ajouter une légende
+  - [x] Ajouter un bouton pour changer d'année
+- [x] Ajouter un graphique avec la progression des résultats des partis par année
 
 ## Requirements
 
