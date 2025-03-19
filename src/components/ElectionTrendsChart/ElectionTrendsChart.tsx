@@ -114,7 +114,7 @@ const ElectionTrendsChart: React.FC = () => {
 
       yearElections.forEach((election) => {
         if (election.parti_gagnant) {
-          winnerCounts[year][election.parti_gagnant]++;
+          winnerCounts[year][election.parti_gagnant as PoliticalParty]++;
         }
       });
     });
@@ -259,9 +259,15 @@ const ElectionTrendsChart: React.FC = () => {
 
   return (
     <div className={styles.chartContainer}>
-      <div className={styles.chartWrapper}>
-        <Line data={evolutionChartData} options={lineChartOptions} />
-        <Bar data={winnersChartData} options={barChartOptions} />
+      <div className={styles.chartSection}>
+        <div className={styles.chartWrapper}>
+          <Line data={evolutionChartData} options={lineChartOptions} />
+        </div>
+      </div>
+      <div className={styles.chartSection}>
+        <div className={styles.chartWrapper}>
+          <Bar data={winnersChartData} options={barChartOptions} />
+        </div>
       </div>
     </div>
   );
