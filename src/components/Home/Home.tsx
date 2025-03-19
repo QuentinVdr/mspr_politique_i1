@@ -1,4 +1,5 @@
 import { useElectionStore } from '@/store/ElectionStore';
+import CantonElectionChart from '../CantonElectionChart/CantonElectionChart';
 import ElectionMap from '../ElectionMap/ElectionMap';
 
 export default function Home() {
@@ -6,8 +7,17 @@ export default function Home() {
 
   return (
     <div>
-      <h2>Data election</h2>
-      {elections.length === 0 ? <p>Loading...</p> : <ElectionMap />}
+      <h1>Analyse des Élections de la régions PACA</h1>
+      {elections.length === 0 ? (
+        <p>Loading...</p>
+      ) : (
+        <>
+          <h2>Map</h2>
+          <ElectionMap />
+          <h2>Canton analyse</h2>
+          <CantonElectionChart />
+        </>
+      )}
     </div>
   );
 }

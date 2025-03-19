@@ -32,6 +32,9 @@ importers:
       react:
         specifier: 19.0.0-rc.1
         version: 19.0.0-rc.1
+      react-chartjs-2:
+        specifier: ^5.3.0
+        version: 5.3.0(chart.js@4.4.8)(react@19.0.0-rc.1)
       react-dom:
         specifier: 19.0.0-rc.1
         version: 19.0.0-rc.1(react@19.0.0-rc.1)
@@ -1211,6 +1214,12 @@ packages:
 
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
+
+  react-chartjs-2@5.3.0:
+    resolution: {integrity: sha512-UfZZFnDsERI3c3CZGxzvNJd02SHjaSJ8kgW1djn65H1KK8rehwTjyrRKOG3VTMG8wtHZ5rgAO5oTHtHi9GCCmw==}
+    peerDependencies:
+      chart.js: ^4.1.1
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   react-dom@19.0.0-rc.1:
     resolution: {integrity: sha512-k8MfDX+4G+eaa1cXXI9QF4d+pQtYol3nx8vauqRWUEOPqC7NQn2qmEqUsLoSd28rrZUL+R3T2VC+kZ2Hyx1geQ==}
@@ -2524,6 +2533,11 @@ snapshots:
   punycode@2.3.1: {}
 
   queue-microtask@1.2.3: {}
+
+  react-chartjs-2@5.3.0(chart.js@4.4.8)(react@19.0.0-rc.1):
+    dependencies:
+      chart.js: 4.4.8
+      react: 19.0.0-rc.1
 
   react-dom@19.0.0-rc.1(react@19.0.0-rc.1):
     dependencies:
