@@ -18,13 +18,32 @@ export default function ElectionGeoJSON({
   const map = useMap();
   const geoJsonLayerRef = useRef<any>(null);
 
+  const cantonPartyWinnerPourcentage = (cantonElection: TElection) => {
+    const winnerParty = cantonElection.parti_gagnant;
+
+    switch (winnerParty) {
+      case 'extreme_gauche':
+        return cantonElection.pct_vote_extreme_gauche;
+      case 'gauche':
+        return cantonElection.pct_vote_gauche;
+      case 'centre':
+        return cantonElection.pct_vote_centre;
+      case 'droite':
+        return cantonElection.pct_vote_droite;
+      case 'extreme_droite':
+        return cantonElection.pct_vote_extreme_droite;
+      default:
+        return 0;
+    }
+  };
+
   // Function to generate popup content
   const createPopupContent = (feature: unknown) => {
-    const cantonElection = getElectionResultByCanton(feature.properties.Canton);
+    const cantonElection = getElectionResultByCanton(feature.properties.Canton)!;
 
     return `
       <strong>Canton:</strong> ${cantonElection?.code_canton}<br/>
-      <strong>Parti gagnant:</strong> ${cantonElection?.parti_gagnant}<br/>
+      <strong>Parti gagnant:</strong> ${cantonElection?.parti_gagnant} (${cantonPartyWinnerPourcentage(cantonElection)}%)<br/>
       <strong>Année:</strong> ${cantonElection?.annee}<br/>
       <strong>Population:</strong> ${cantonElection?.population?.toLocaleString()}<br/>
       <strong>Votes exprimés:</strong> ${cantonElection?.exprimes?.toLocaleString()}<br/>
