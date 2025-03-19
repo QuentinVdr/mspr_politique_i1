@@ -1,8 +1,9 @@
 import { useElectionStore } from '@/store/ElectionStore';
 import { TElection } from '@/types/ElectionType';
 import { getColorsByPolitical } from '@/utils/politicalColors';
-import { useEffect, useMemo, useState } from 'react';
-import { GeoJSON, MapContainer, TileLayer } from 'react-leaflet';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { MapContainer, TileLayer } from 'react-leaflet';
+import ElectionGeoJSON from '../ElectionGeoJSON/ElectionGeoJSON';
 import styles from './ElectionMap.module.css';
 
 export default function ElectionMap() {
@@ -37,16 +38,16 @@ export default function ElectionMap() {
       });
   }, [getElectionByAnnee, selectedYear]);
 
-  const getElectionResultByCanton = useMemo(
-    () => (canton: string) => {
+  const getElectionResultByCanton = useCallback(
+    (canton: string) => {
       return selectedYearsElections.find((election: TElection) => election.code_canton === canton);
     },
     [selectedYearsElections]
   );
 
   // Style function for the GeoJSON features
-  const cantonStyle = useMemo(
-    () => (feature: any) => {
+  const cantonStyle = useCallback(
+    (feature: any) => {
       const cantonElection = getElectionResultByCanton(feature.properties.Canton);
 
       return {
@@ -60,42 +61,6 @@ export default function ElectionMap() {
     },
     [getElectionResultByCanton]
   );
-
-  // Event handlers for GeoJSON features
-  const onEachFeature = (feature: any, layer: any) => {
-    const cantonElection = getElectionResultByCanton(feature.properties.Canton);
-
-    // Add popup with canton info and more detailed election information
-    layer.bindPopup(`
-      <strong>Canton:</strong> ${cantonElection?.code_canton}<br/>
-      <strong>Parti gagnant:</strong> ${cantonElection?.parti_gagnant}<br/>
-      <strong>Année:</strong> ${cantonElection?.annee}<br/>
-      <strong>Population:</strong> ${cantonElection?.population?.toLocaleString()}<br/>
-      <strong>Votes exprimés:</strong> ${cantonElection?.exprimes?.toLocaleString()}<br/>
-      <strong>% Abstentions:</strong> ${cantonElection?.pct_abstentions?.toFixed(2)}%
-    `);
-
-    // Add hover effect
-    layer.on({
-      mouseover: (e: any) => {
-        const layer = e.target;
-        layer.setStyle({
-          weight: 3,
-          color: '#666',
-          fillOpacity: 0.7
-        });
-        layer.bringToFront();
-      },
-      mouseout: (e: any) => {
-        const layer = e.target;
-        layer.setStyle({
-          weight: 1,
-          color: 'white',
-          fillOpacity: 0.5
-        });
-      }
-    });
-  };
 
   const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedYear(Number(e.target.value));
@@ -150,7 +115,12 @@ export default function ElectionMap() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {geoJsonData && (
-          <GeoJSON key={selectedYear} data={geoJsonData} style={cantonStyle} onEachFeature={onEachFeature} />
+          <ElectionGeoJSON
+            data={geoJsonData}
+            selectedYear={selectedYear}
+            getElectionResultByCanton={getElectionResultByCanton}
+            cantonStyle={cantonStyle}
+          />
         )}
       </MapContainer>
     </div>
