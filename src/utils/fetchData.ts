@@ -1,4 +1,5 @@
 import { TElection } from '@/types/ElectionType';
+import { TPrediction } from '@/types/PredictionType';
 import Papa from 'papaparse';
 
 export const fetchAndParseCSV = (): Promise<TElection[]> => {
@@ -94,6 +95,38 @@ export const fetchAndParseCSV = (): Promise<TElection[]> => {
           // Election results
           parti_gagnant: row.parti_gagnant as 'extreme_gauche' | 'gauche' | 'centre' | 'droite' | 'extreme_droite',
           niveau_richesse: toNumber(row.niveau_richesse)
+        };
+      });
+    });
+};
+
+export const fetchAndParsePredictionCSV = (): Promise<TPrediction[]> => {
+  return fetch('data/simple_predictions.csv')
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.text();
+    })
+    .then((csvString) => {
+      const result = Papa.parse(csvString, {
+        header: true,
+        skipEmptyLines: true,
+        dynamicTyping: false // Keep as strings so we can do custom type conversion
+      });
+
+      // Convert string values to appropriate types
+      return result.data.map((row: any): TPrediction => {
+        // Helper function to convert string to number
+        const toNumber = (value: string): number => (value === '' ? 0 : parseFloat(value.replace(',', '.')));
+
+        return {
+          // Identification columns
+          code_canton: String(row.code_canton),
+          annee: toNumber(row.annee),
+
+          // Election results
+          parti_gagnant: row.parti_gagnant as 'extreme_gauche' | 'gauche' | 'centre' | 'droite' | 'extreme_droite'
         };
       });
     });

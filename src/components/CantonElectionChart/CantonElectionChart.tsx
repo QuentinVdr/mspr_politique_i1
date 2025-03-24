@@ -25,7 +25,7 @@ type ChartType = 'bar' | 'line' | 'pie' | 'doughnut';
 
 export default function CantonElectionChart() {
   const allElections = useElectionStore((state) => state.elections);
-  const getElectionByAnnee = useElectionStore((state) => state.getElectionByAnnee);
+  const getElectionsByAnnee = useElectionStore((state) => state.getElectionsByAnnee);
 
   const [selectedYear, setSelectedYear] = useState<number>(2022);
   const [selectedCanton, setSelectedCanton] = useState<string>('0401');
@@ -57,9 +57,9 @@ export default function CantonElectionChart() {
   // Effect to get data for selected year
   useEffect(() => {
     if (selectedYear) {
-      getElectionByAnnee(selectedYear);
+      getElectionsByAnnee(selectedYear);
     }
-  }, [selectedYear, getElectionByAnnee]);
+  }, [selectedYear, getElectionsByAnnee]);
 
   // Generate chart data for voting results
   const getVotingChartData = () => {

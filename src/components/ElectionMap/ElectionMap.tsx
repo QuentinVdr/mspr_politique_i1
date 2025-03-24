@@ -8,7 +8,7 @@ import styles from './ElectionMap.module.css';
 
 export default function ElectionMap() {
   const center: [number, number] = [43.9351691, 6.0679194];
-  const getElectionByAnnee = useElectionStore((state) => state.getElectionByAnnee);
+  const getElectionsByAnnee = useElectionStore((state) => state.getElectionsByAnnee);
   const allElections = useElectionStore((state) => state.elections);
 
   const [selectedYearsElections, setSelectedYearsElections] = useState<TElection[]>([]);
@@ -25,7 +25,7 @@ export default function ElectionMap() {
   }, [allElections]);
 
   useEffect(() => {
-    setSelectedYearsElections(getElectionByAnnee(selectedYear));
+    setSelectedYearsElections(getElectionsByAnnee(selectedYear));
 
     // Fetch GeoJSON data
     fetch('data/cantons_par_commune_PACA.geojson')
@@ -36,7 +36,7 @@ export default function ElectionMap() {
       .catch((error) => {
         console.error('Error loading GeoJSON:', error);
       });
-  }, [getElectionByAnnee, selectedYear]);
+  }, [getElectionsByAnnee, selectedYear]);
 
   const getElectionResultByCanton = useCallback(
     (canton: string) => {
