@@ -19,6 +19,7 @@ export default function Home() {
           <CantonElectionChart />
           <h2>Analyse global</h2>
           <ElectionTrendsChart />
+          <h2>Prevision des elections</h2>
         </>
       )}
     </div>
