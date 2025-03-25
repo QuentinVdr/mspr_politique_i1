@@ -29,7 +29,7 @@ export default function CantonElectionChart() {
 
   const [selectedYear, setSelectedYear] = useState<number>(2022);
   const [selectedCanton, setSelectedCanton] = useState<string>('0401');
-  const [chartType, setChartType] = useState<ChartType>('bar');
+  const [chartType, setChartType] = useState<ChartType>('line');
   const [yearlyData, setYearlyData] = useState<TElection[]>([]);
   const [cantonOptions, setCantonOptions] = useState<string[]>([]);
   const [yearOptions, setYearOptions] = useState<number[]>([]);
@@ -199,23 +199,6 @@ export default function CantonElectionChart() {
         </div>
 
         <div className={styles.controlGroup}>
-          <label htmlFor="yearSelect">Année:</label>
-          <select
-            id="yearSelect"
-            value={selectedYear}
-            onChange={(e) => setSelectedYear(Number(e.target.value))}
-            className={styles.select}
-            disabled={chartType === 'line'}
-          >
-            {yearOptions.map((year) => (
-              <option key={year} value={year}>
-                {year}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className={styles.controlGroup}>
           <label htmlFor="chartTypeSelect">Type de graphique:</label>
           <select
             id="chartTypeSelect"
@@ -229,6 +212,24 @@ export default function CantonElectionChart() {
             <option value="doughnut">Anneau</option>
           </select>
         </div>
+
+        {chartType !== 'line' && (
+          <div className={styles.controlGroup}>
+            <label htmlFor="yearSelect">Année:</label>
+            <select
+              id="yearSelect"
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(Number(e.target.value))}
+              className={styles.select}
+            >
+              {yearOptions.map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
 
       <div className={styles.chartWrapper}>{renderChart()}</div>
