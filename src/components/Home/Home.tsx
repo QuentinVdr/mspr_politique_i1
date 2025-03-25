@@ -6,11 +6,14 @@ import ElectionTrendsChart from '../ElectionTrendsChart/ElectionTrendsChart';
 
 export default function Home() {
   const elections = useElectionStore((state) => state.elections);
+  const predictions = useElectionStore((state) => state.predictions);
+
+  const isLoading = elections.length === 0 || predictions.length === 0;
 
   return (
     <div>
       <h1>Analyse des Élections de la régions PACA</h1>
-      {elections.length === 0 ? (
+      {isLoading ? (
         <p>Loading...</p>
       ) : (
         <>
