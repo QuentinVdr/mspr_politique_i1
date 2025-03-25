@@ -1,6 +1,7 @@
 import { useElectionStore } from '@/store/ElectionStore';
 import CantonElectionChart from '../CantonElectionChart/CantonElectionChart';
 import ElectionMap from '../ElectionMap/ElectionMap';
+import ElectionPredictionChart from '../ElectionPredictionChart/ElectionPredictionChart';
 import ElectionTrendsChart from '../ElectionTrendsChart/ElectionTrendsChart';
 
 export default function Home() {
@@ -20,6 +21,7 @@ export default function Home() {
           <h2>Analyse global</h2>
           <ElectionTrendsChart />
           <h2>Prevision des elections</h2>
+          <ElectionPredictionChart />
         </>
       )}
     </div>
