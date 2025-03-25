@@ -145,6 +145,65 @@ export default function CantonElectionChart() {
     }
   };
 
+  // Generate demographic chart data
+  const getDemographicChartData = () => {
+    if (yearlyData.length === 0) return null;
+
+    // Get data for the selected year
+    const currentYearData =
+      yearlyData.find((election) => election.annee === selectedYear) || yearlyData[yearlyData.length - 1];
+
+    if (!currentYearData) return null;
+
+    // Demographic labels and data
+    const labels = [
+      'Agriculteurs',
+      'Artisans/Commerçants',
+      'Cadres',
+      'Prof. Intermédiaires',
+      'Employés',
+      'Ouvriers',
+      'Retraités',
+      'Autres'
+    ];
+
+    const data = [
+      currentYearData.pct_agriculteurs_exploitants,
+      currentYearData.pct_artisans_comm_chefs_entr,
+      currentYearData.pct_cadres_prof_intel_sup,
+      currentYearData.pct_professions_intermediaires,
+      currentYearData.pct_employes,
+      currentYearData.pct_ouvriers,
+      currentYearData.pct_retraites,
+      currentYearData.pct_autres_sans_activite_prof
+    ];
+
+    // Custom colors for demographic categories
+    const backgroundColor = [
+      '#7CB342', // green for farmers
+      '#FF9800', // orange for artisans/business owners
+      '#1E88E5', // blue for executives
+      '#42A5F5', // light blue for intermediate professions
+      '#26A69A', // teal for employees
+      '#78909C', // blue-grey for workers
+      '#9E9E9E', // grey for retirees
+      '#BDBDBD' // light grey for others
+    ];
+
+    return {
+      labels,
+      datasets: [
+        {
+          labels: `Démographie ${currentYearData.annee}`,
+          data,
+          backgroundColor,
+          borderColor: backgroundColor.map((color) => color),
+          borderWidth: 1
+        }
+      ]
+    };
+  };
+
   // Chart options
   const chartOptions = {
     responsive: true,
@@ -156,6 +215,30 @@ export default function CantonElectionChart() {
       title: {
         display: true,
         text: `Résultats électoraux - Canton ${selectedCanton}`
+      }
+    }
+  };
+
+  // Demographic chart options
+  const demographicChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top' as const
+      },
+      title: {
+        display: true,
+        text: `Démographie - Canton ${selectedCanton} ${selectedYear}`
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Pourcentage (%)'
+        }
       }
     }
   };
@@ -177,6 +260,14 @@ export default function CantonElectionChart() {
       default:
         return <Bar data={data} options={chartOptions} />;
     }
+  };
+
+  // Render the demographic chart
+  const renderDemographicChart = () => {
+    const data = getDemographicChartData();
+    if (!data) return <div>No demographic data available</div>;
+
+    return <Bar data={data} options={demographicChartOptions} />;
   };
 
   return (
@@ -213,26 +304,28 @@ export default function CantonElectionChart() {
           </select>
         </div>
 
-        {chartType !== 'line' && (
-          <div className={styles.controlGroup}>
-            <label htmlFor="yearSelect">Année:</label>
-            <select
-              id="yearSelect"
-              value={selectedYear}
-              onChange={(e) => setSelectedYear(Number(e.target.value))}
-              className={styles.select}
-            >
-              {yearOptions.map((year) => (
-                <option key={year} value={year}>
-                  {year}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
+        <div className={styles.controlGroup}>
+          <label htmlFor="yearSelect">Année:</label>
+          <select
+            id="yearSelect"
+            value={selectedYear}
+            onChange={(e) => setSelectedYear(Number(e.target.value))}
+            className={styles.select}
+          >
+            {yearOptions.map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <div className={styles.chartWrapper}>{renderChart()}</div>
+
+      <div className={styles.chartWrapper} style={{ marginTop: '20px' }}>
+        {renderDemographicChart()}
+      </div>
 
       {/* Display some additional info */}
       {yearlyData.find((election) => election.annee === selectedYear) && (
@@ -261,6 +354,18 @@ export default function CantonElectionChart() {
               <span className={styles.statLabel}>Parti gagnant:</span>
               <span className={styles.statValue}>
                 {yearlyData.find((e) => e.annee === selectedYear)?.parti_gagnant}
+              </span>
+            </div>
+            <div className={styles.statItem}>
+              <span className={styles.statLabel}>Hommes:</span>
+              <span className={styles.statValue}>
+                {yearlyData.find((e) => e.annee === selectedYear)?.pct_population_hommes.toFixed(2)}%
+              </span>
+            </div>
+            <div className={styles.statItem}>
+              <span className={styles.statLabel}>Impôt moyen:</span>
+              <span className={styles.statValue}>
+                {yearlyData.find((e) => e.annee === selectedYear)?.impot_moyen.toLocaleString()} €
               </span>
             </div>
           </div>
