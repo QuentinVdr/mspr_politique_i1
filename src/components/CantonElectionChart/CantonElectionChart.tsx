@@ -323,10 +323,6 @@ export default function CantonElectionChart() {
 
       <div className={styles.chartWrapper}>{renderChart()}</div>
 
-      <div className={styles.chartWrapper} style={{ marginTop: '20px' }}>
-        {renderDemographicChart()}
-      </div>
-
       {/* Display some additional info */}
       {yearlyData.find((election) => election.annee === selectedYear) && (
         <div className={styles.statsContainer}>
@@ -371,6 +367,10 @@ export default function CantonElectionChart() {
           </div>
         </div>
       )}
+
+      <div className={styles.chartWrapper} style={{ marginTop: '20px' }}>
+        {renderDemographicChart()}
+      </div>
     </div>
   );
 }
