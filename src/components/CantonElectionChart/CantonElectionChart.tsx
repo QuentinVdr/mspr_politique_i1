@@ -216,6 +216,15 @@ export default function CantonElectionChart() {
         display: true,
         text: `Résultats électoraux - Canton ${selectedCanton}`
       }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Pourcentage (%)'
+        }
+      }
     }
   };
 
