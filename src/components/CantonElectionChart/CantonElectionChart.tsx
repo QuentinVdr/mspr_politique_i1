@@ -164,7 +164,7 @@ export default function CantonElectionChart() {
       'Employés',
       'Ouvriers',
       'Retraités',
-      'Autres'
+      'Sans activité professionnelle'
     ];
 
     const data = [
