@@ -1,5 +1,7 @@
 # Mspr m1 Politique
 
+Site web pour visualisé les données des elections politique plus simplement avec une carte intéractive
+
 ## TODO
 
 - [x] Ajouter une carte avec les gagnants de chaque canton
