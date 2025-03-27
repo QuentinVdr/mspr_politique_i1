@@ -23,5 +23,5 @@ pnpm install
 ## Usage
 
 ```bash
-pnpm start
+pnpm dev
 ```
